@@ -35,11 +35,19 @@ function App() {
       id:uuidv4(),
       title: title,
       completed: false
-    },
-    ...todoList]
+    }, ...todoList]
     setTodoList(nextTodo)
   }
-  // {console.log(initialTodoList)}
+
+  const deleteTodo = id => {
+    const idx = todoList.findIndex(item => {
+      item.id === id
+    } )
+    const nextTodo = [...todoList]
+    nextTodo.splice(idx, 1)
+    setTodoList(nextTodo)
+  }
+  
   return (
     <div className="container">
       <div className="mt-5 mx-auto mw-xs">
@@ -50,6 +58,7 @@ function App() {
         <RemainingMessage/>
         <TodoList
         todoList = {todoList}
+        deleteTodo = {deleteTodo}
         />
       </div>
     </div>
