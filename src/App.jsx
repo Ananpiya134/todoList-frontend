@@ -44,7 +44,6 @@ function App() {
     const nextTodo = [...todoList]
     nextTodo.splice(idx, 1)
     setTodoList(nextTodo)
-    
   }
   
   return (
