@@ -1,10 +1,10 @@
 import EditTodo from "./EditTodo"
 
 function TodoItem (props){
-    const {item, key, deleteTodo} = props
+    const {item, deleteTodo} = props
 
-    const handleDelete = item => {
-        deleteTodo(key)
+    const handleDelete = e => {
+        deleteTodo(item.id)
     }
     return (
         <li className={`list-group-item d-flex justify-content-between align-items-center bd-callout bd-callout-${item.completed ? "success": "warning"}`}>

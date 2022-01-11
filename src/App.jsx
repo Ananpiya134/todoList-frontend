@@ -40,12 +40,11 @@ function App() {
   }
 
   const deleteTodo = id => {
-    const idx = todoList.findIndex(item => {
-      item.id === id
-    } )
+    const idx = todoList.findIndex(item => item.id === id)
     const nextTodo = [...todoList]
     nextTodo.splice(idx, 1)
     setTodoList(nextTodo)
+    
   }
   
   return (
