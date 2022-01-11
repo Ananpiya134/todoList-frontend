@@ -1,7 +1,7 @@
 import TodoItem from "./TodoItem";
 
 function TodoList(props){
-    const {todoList, deleteTodo} = props 
+    const {todoList, deleteTodo, updateTodo} = props 
     return(
         <div className="shadow">
             <ul className="list-group rounded-0">
@@ -10,6 +10,7 @@ function TodoList(props){
                     item={item}
                     key={item.id}
                     deleteTodo={deleteTodo}
+                    updateTodo={updateTodo}
                     />
                 })}
             </ul>

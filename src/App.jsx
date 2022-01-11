@@ -44,7 +44,13 @@ function App() {
     const nextTodo = [...todoList]
     nextTodo.splice(idx, 1)
     setTodoList(nextTodo)
-    
+  }
+
+  const updateTodo = (id,{id:objId,...value}) => {
+    const idx = todoList.findIndex(item => item.id === id)
+    const nextTodo = [...todoList]
+    nextTodo[idx] = {...nextTodo[idx], ...value}
+    setTodoList(nextTodo)
   }
   
   return (
@@ -58,6 +64,7 @@ function App() {
         <TodoList
         todoList = {todoList}
         deleteTodo = {deleteTodo}
+        updateTodo = {updateTodo}
         />
       </div>
     </div>
