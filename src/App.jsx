@@ -6,6 +6,13 @@ import RemainingMessage from './components/RemainingMessage';
 import TodoList from './components/TodoList';
 import './App.css';
 
+
+
+
+function App(){
+  axios.get('https://jsonplaceholder.typicode.com/todos/1').then(response=> console.log(response))
+}
+
 const initialTodoList = [
   {
     id: uuidv4(),
