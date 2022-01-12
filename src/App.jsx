@@ -1,17 +1,12 @@
 import {useState, useContext, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
+import axios from 'axios'
 import AddTodo from './components/AddTodo';
 import SearchBar from './components/SearchBar';
 import RemainingMessage from './components/RemainingMessage';
 import TodoList from './components/TodoList';
 import './App.css';
 
-
-
-
-function App(){
-  axios.get('https://jsonplaceholder.typicode.com/todos/1').then(response=> console.log(response))
-}
 
 const initialTodoList = [
   {
@@ -35,33 +30,63 @@ const initialTodoList = [
 ]
 
 function App() {
-  const [todoList,setTodoList] = useState(initialTodoList);
+  const [todoList,setTodoList] = useState([]);
   const [searchText,setSearchText] = useState('')
   const [statusText,setStatusText] = useState('')
-  // const [searchTerm,setSearchTerm] = useState({text:(''),status:('')})
+  
+  useEffect(() => {
+    axios.get('http://localhost:8080/todos')
+    .then(res => {
+      setTodoList(res.data.todos)
+    }).catch(err => console.log(err))
+  },[])
   
   const createTodo = title => {
-    const nextTodo = [{
-      id:uuidv4(),
-      title: title,
-      completed: false
-    }, ...todoList]
-    setTodoList(nextTodo)
+    
+    axios.post('http://localhost:8080/todos', {title: title, completed: false})
+    .then(res => {
+      const nextTodo = [res.data.todo,...todoList]
+      setTodoList(nextTodo)
+    })
+    .catch(err => console.log(err))
   }
-
   const deleteTodo = id => {
-    const idx = todoList.findIndex(item => item.id === id)
-    const nextTodo = [...todoList]
-    nextTodo.splice(idx, 1)
-    setTodoList(nextTodo)
+    axios.delete(`http://localhost:8080/todos/${id}`)
+    .then(() => {
+      const idx = todoList.findIndex(item => item.id === id)
+      const nextTodo = [...todoList]
+      nextTodo.splice(idx,1)
+      setTodoList(nextTodo)
+    })
+    .catch(err => console.log(err))
+    
   }
 
-  const updateTodo = (id,value) => {
-    const idx = todoList.findIndex(item => item.id === id)
+  // const deleteTodo = id => {
+  //   const idx = todoList.findIndex(item => item.id === id)
+  //   const nextTodo = [...todoList]
+  //   nextTodo.splice(idx, 1)
+  //   setTodoList(nextTodo)
+  // }
+
+  const updateTodo = (id, value) => {
+    const idx = todoList.findIndex(item => item.id ===  id)
     const nextTodo = [...todoList]
-    nextTodo[idx] = {...nextTodo[idx], ...value}
-    setTodoList(nextTodo)
+    nextTodo[idx] = {...nextTodo[idx],...value}
+    axios.put(`http://localhost:8080/todos/${id}`,nextTodo[idx])
+    .then(res => {
+      setTodoList(nextTodo)
+    })
+    
+    
   }
+
+  // const updateTodo = (id,value) => {
+  //   const idx = todoList.findIndex(item => item.id === id)
+  //   const nextTodo = [...todoList]
+  //   nextTodo[idx] = {...nextTodo[idx], ...value}
+  //   setTodoList(nextTodo)
+  // }
 
   const pendingTodoList = todoList.filter(item => !item.completed)
 
