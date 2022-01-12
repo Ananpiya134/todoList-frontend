@@ -63,6 +63,7 @@ function App() {
     item.title.toLowerCase().includes(searchText.toLowerCase()) &&
     (statusText === '' || item.completed === statusText)
   )
+
   
   return (
     <div className="container">

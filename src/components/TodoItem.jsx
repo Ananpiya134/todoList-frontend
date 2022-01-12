@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import EditTodo from "./EditTodo"
 
 function TodoItem (props){
     const {item, deleteTodo, updateTodo} = props
-
+    const [isEdit,setIsEdit] = useState(false)
     const handleClickDelete = () => {
         deleteTodo(item.id)
     }
@@ -11,11 +12,16 @@ function TodoItem (props){
         updateTodo(item.id, {completed:!item.completed})
         console.log(item.completed)
     }
+
+
+
+
     return (
         <li className={`list-group-item d-flex justify-content-between align-items-center bd-callout bd-callout-${item.completed ? "success": "warning"}`}>
-           {/* <EditTodo/> */}
-           
-            <span>{item.title}</span>
+           {isEdit ? (<EditTodo onClickCancel={() => setIsEdit(false)}/>)
+           :(
+           <>
+           <span onClick={ () => setIsEdit(true) }>{item.title}</span>
             <div className="btn-group">
                 <button 
                 className="btn btn-info rounded-0"
@@ -29,6 +35,8 @@ function TodoItem (props){
                     <i className={`fas fa-trash-alt`}/>
                 </button>
             </div>
+            </>
+           )}   
         </li>
     )
 }
