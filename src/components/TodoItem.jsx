@@ -4,6 +4,7 @@ import EditTodo from "./EditTodo"
 function TodoItem (props){
     const {item, deleteTodo, updateTodo} = props
     const [isEdit,setIsEdit] = useState(false)
+    
     const handleClickDelete = () => {
         deleteTodo(item.id)
     }
@@ -18,7 +19,12 @@ function TodoItem (props){
 
     return (
         <li className={`list-group-item d-flex justify-content-between align-items-center bd-callout bd-callout-${item.completed ? "success": "warning"}`}>
-           {isEdit ? (<EditTodo onClickCancel={() => setIsEdit(false)}/>)
+           {isEdit ? (<EditTodo 
+           onClickCancel={() => setIsEdit(false)}
+           id={item.id}
+           title={item.title}
+           updateTodo={updateTodo}
+           />)
            :(
            <>
            <span onClick={ () => setIsEdit(true) }>{item.title}</span>

@@ -49,7 +49,7 @@ function App() {
     setTodoList(nextTodo)
   }
 
-  const updateTodo = (id,{id:objId,...value}) => {
+  const updateTodo = (id,value) => {
     const idx = todoList.findIndex(item => item.id === id)
     const nextTodo = [...todoList]
     nextTodo[idx] = {...nextTodo[idx], ...value}
@@ -64,7 +64,6 @@ function App() {
     (statusText === '' || item.completed === statusText)
   )
 
-  
   return (
     <div className="container">
       <div className="mt-5 mx-auto mw-xs">
