@@ -29,6 +29,9 @@ const initialTodoList = [
 
 function App() {
   const [todoList,setTodoList] = useState(initialTodoList);
+  const [searchText,setSearchText] = useState('')
+  const [statusText,setStatusText] = useState('')
+  // const [searchTerm,setSearchTerm] = useState({text:(''),status:('')})
   
   const createTodo = title => {
     const nextTodo = [{
@@ -52,6 +55,14 @@ function App() {
     nextTodo[idx] = {...nextTodo[idx], ...value}
     setTodoList(nextTodo)
   }
+
+  const pendingTodoList = todoList.filter(item => !item.completed)
+
+  const filterTodoList = todoList.filter(
+    item => 
+    item.title.toLowerCase().includes(searchText.toLowerCase()) &&
+    (statusText === '' || item.completed === statusText)
+  )
   
   return (
     <div className="container">
@@ -59,10 +70,18 @@ function App() {
         <AddTodo
         createTodo={createTodo}
         />
-        <SearchBar/>
-        <RemainingMessage/>
+        <SearchBar
+        statusText={statusText}
+        setStatusText={setStatusText}
+        setSearchText={setSearchText}
+        searchText={searchText}
+        />
+        <RemainingMessage
+        remaining={pendingTodoList.length}
+        total = {todoList.length}
+        />
         <TodoList
-        todoList = {todoList}
+        todoList = {filterTodoList}
         deleteTodo = {deleteTodo}
         updateTodo = {updateTodo}
         />
