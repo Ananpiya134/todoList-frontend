@@ -1,11 +1,22 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 function TextFilter(props){
-    const {setSearchText,searchText} = props 
-    
+    const {setSearchText} = props 
+    const  [input,setInput] = useState('')
+
+    useEffect(() => {
+        const timeoutId = setTimeout(()=> {
+            // setSearchText(input)
+            console.log('input changed')
+        },1500)
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    },[input,setSearchText])
+
     const handleChangeText = e => {
-       setSearchText(e.target.value)
-    //    console.log(searchText)
+       setInput(e.target.value)
+    
     }
     
     return(
@@ -13,7 +24,7 @@ function TextFilter(props){
             <input 
             type="text" 
             className="form-control rounded-0" 
-            value={searchText}
+            value={input}
             onChange={handleChangeText}
             />
             <button 
