@@ -4,13 +4,13 @@ function TextFilter(props){
     const {setSearchText} = props 
     const  [input,setInput] = useState('')
 
-    useEffect(() => {
-        const timeoutId = setTimeout(()=> {
+    useEffect(() => {                                                                      //the useEffect id created to decrease working of sending request to database
+        const timeoutId = setTimeout(()=> {                                                //by using setTimeout to send search request after 1500 ms
             // setSearchText(input)
             console.log('input changed')
         },1500)
-        return () => {
-            clearTimeout(timeoutId)
+        return () => {  
+            clearTimeout(timeoutId)                                                        //the return of clearTimeout is for clearing effect from the previos effect
         }
     },[input,setSearchText])
 
