@@ -1,89 +1,29 @@
-import {useState, useContext, useEffect} from 'react'
-import {v4 as uuidv4} from 'uuid'
-import axios from 'axios'
+import { createContext , useState} from 'react'
 import AddTodo from './components/AddTodo';
 import SearchBar from './components/SearchBar';
 import RemainingMessage from './components/RemainingMessage';
 import TodoList from './components/TodoList';
 import './App.css';
 
-// done 
-const initialTodoList = [ { id: uuidv4(), title: 'watch movie', completed: false }, { id: uuidv4(), title: 'meeting', completed: true }, { id: uuidv4(), title: 'party', completed: false  } ]
+const TodoListContext = createContext()
 
 function App() {
-  const [todoList,setTodoList] = useState([]);
-  const [searchText,setSearchText] = useState('')
-  const [statusText,setStatusText] = useState('')
+  const [todoList,setTodoList] = useState([])
   
-  useEffect(() => {                                                                   //using useEffect and axios to get data from database
-    axios.get('http://localhost:8080/todos')                                          //the code group is written to get data drom data base
-    .then(res => {
-      setTodoList(res.data.todos)
-    }).catch(err => console.log(err))
-  },[])
   
-  const createTodo = title => {                                                       //create function to create todoList by using axios 
-    axios.post('http://localhost:8080/todos', {title: title, completed: false})
-    .then(res => {
-      const nextTodo = [res.data.todo,...todoList]
-      setTodoList(nextTodo)
-    })
-    .catch(err => console.log(err))
-  }
-
-  const deleteTodo = id => {                                                          //create function to delete todoList by using axios
-    axios.delete(`http://localhost:8080/todos/${id}`)
-    .then(() => {
-      const idx = todoList.findIndex(item => item.id === id)
-      const nextTodo = [...todoList]
-      nextTodo.splice(idx,1)
-      setTodoList(nextTodo)
-    })
-    .catch(err => console.log(err))
-  }
-
-  const updateTodo = (id, value) => {                                                 //create function to update the data change in database by using axios
-    const idx = todoList.findIndex(item => item.id ===  id)
-    const nextTodo = [...todoList]
-    nextTodo[idx] = {...nextTodo[idx],...value}
-    axios.put(`http://localhost:8080/todos/${id}`,nextTodo[idx])
-    .then(res => {
-      setTodoList(nextTodo)
-    })    
-  }
-
-  const pendingTodoList = todoList.filter(item => !item.completed)                    //the function is created to calculate the remainning todoList from the data exist on the not the db
-
-  const filterTodoList = todoList.filter(                                             //the function is created to filtered out the desire title of todoList
-    item => 
-    item.title.toLowerCase().includes(searchText.toLowerCase()) &&
-    (statusText === '' || item.completed === statusText)
-  )
-
   return (
     <div className="container">
       <div className="mt-5 mx-auto mw-xs">
-        <AddTodo
-        createTodo={createTodo}
-        />
-        <SearchBar
-        statusText={statusText}
-        setStatusText={setStatusText}
-        setSearchText={setSearchText}
-        searchText={searchText}
-        />
-        <RemainingMessage
-        remaining={pendingTodoList.length}
-        total = {todoList.length}
-        />
-        <TodoList
-        todoList = {filterTodoList}
-        deleteTodo = {deleteTodo}
-        updateTodo = {updateTodo}
-        />
+        <TodoListContext.Provider value={{todoList:todoList,setTodoList:setTodoList}}>
+          <AddTodo/>
+          <SearchBar/>
+          <RemainingMessage/>
+          <TodoList/>
+        </TodoListContext.Provider>
       </div>
     </div>
   );
 }
 
 export default App;
+export{ TodoListContext }

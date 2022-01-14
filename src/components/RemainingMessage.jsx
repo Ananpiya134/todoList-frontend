@@ -1,8 +1,8 @@
-function RemainingMessage(props){
-    const {remaining, total} = props
+function RemainingMessage(){
+
     return (
         <div className="mt-4 bt-4 py-3 text-center bg-dark text-white">
-            {remaining} out of {total} Remaining
+           1 out of 3 Remaining
         </div>
     )
 }
